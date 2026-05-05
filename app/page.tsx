@@ -10,6 +10,7 @@ import Leasing from "@/components/Leasing";
 import CTA from "@/components/CTA";
 import Navbar from "@/components/Navbar";
 import ScrollProgress from "@/components/ScrollProgress";
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 export default function Home() {
   return (
@@ -26,6 +27,7 @@ export default function Home() {
       <Sponsorship />
       <Leasing />
       <CTA />
+      <SpeedInsights />
     </main>
   );
 }
