@@ -1,5 +1,6 @@
 "use client";
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef } from "react";
 
 const concepts = [
   { name: "Fine Dining", desc: "Michelin-starred chefs and curated tasting menus for the world's most discerning palates.", count: "40+ Restaurants" },
@@ -9,31 +10,48 @@ const concepts = [
 ];
 
 export default function Dining() {
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
+  const imgY = useTransform(scrollYProgress, [0, 1], [-50, 50]);
+
   return (
-    <section id="dining" className="relative py-32 overflow-hidden" style={{ background: "var(--charcoal)" }}>
+    <section id="dining" ref={ref} className="relative overflow-hidden" style={{ background: "var(--charcoal)" }}>
       <div className="section-fade-top" />
 
-      <div className="max-w-7xl mx-auto px-6 md:px-12">
-
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.9 }}
-          className="mb-20 max-w-2xl"
-        >
-          <div className="flex items-center gap-3 mb-6">
+      {/* Cinematic full-bleed dining image with parallax */}
+      <div className="relative h-[55vh] overflow-hidden">
+        <motion.img
+          src="/images/dining.jpg"
+          alt="Luxury dining at Dubai Mall"
+          style={{ y: imgY }}
+          className="absolute w-full h-[110%] object-cover -top-[5%]"
+          loading="lazy"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#111]/60 via-transparent to-[#111]" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#111]/50 to-transparent" />
+        {/* Overlaid headline on image */}
+        <div className="absolute bottom-16 left-8 md:left-16">
+          <div className="flex items-center gap-3 mb-4">
             <div className="h-[1px] w-8" style={{ background: "var(--gold)" }} />
             <span className="text-xs tracking-[0.25em] uppercase font-light" style={{ color: "var(--gold)" }}>Dining & Lifestyle</span>
           </div>
           <h2 className="font-display text-4xl md:text-6xl text-white font-light leading-tight">
             Food as a<br /><em>Destination Itself</em>
           </h2>
-          <p className="mt-6 text-white/40 text-sm leading-relaxed">
-            Dubai Mall's dining ecosystem drives 4+ hour dwell times. Your F&B concept doesn't just serve meals — it captures an audience that spends, returns, and recommends.
-          </p>
-        </motion.div>
+        </div>
+      </div>
+
+      <div className="py-24 max-w-7xl mx-auto px-6 md:px-12">
+        {/* Subhead */}
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="text-white/40 text-sm leading-relaxed max-w-2xl mb-16"
+        >
+          Dubai Mall's dining ecosystem drives 4+ hour dwell times. Your F&B concept doesn't just serve meals — it captures an audience that spends, returns, and recommends.
+        </motion.p>
 
         {/* Concept grid */}
         <div className="grid md:grid-cols-2 gap-6 mb-20">
